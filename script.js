@@ -1,4 +1,4 @@
-   // ⬇️ Paste your versatilePlayers object below this line
+ // 🔽 START: Versatile Players Object
     const versatilePlayers = {
       ROONEY: ["ST", "CAM", "CM"],
   BECKHAM: ["RW", "RM", "CM"],
@@ -71,7 +71,7 @@
   BROOKING: ["CM", "CAM"],
   CHANNON: ["ST"],
   "M.WRIGHT": ["CB"],
-  SAKA: ["RW", "LW", "RWB"],
+  SAKA: ["RW", "LW", "RWB", ],
   FODEN: ["CAM", "LW", "RW"],
   KEOWN: ["CB"],
   WOODS: ["GK"],
@@ -257,6 +257,7 @@ MOUNT: ['CAM', 'CM'],
 MCMANAMAN: ['RW', 'RM', 'CAM']
       // Add more players here
     };
+// 🔼 END: Versatile Players Object
   const positionCategory = {
     GK: "GK",
     LB: "DEF", RB: "DEF", CB: "DEF", LWB: "DEF", RWB: "DEF",
@@ -344,6 +345,12 @@ const formationPresets = {
  let firstClick = true; // ✅ Add this at the top of your script
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Close popup button handler
+  document.getElementById("closePopup").addEventListener("click", () => {
+    document.getElementById("positionPopup").style.display = "none";
+  });
+
+  // Player click handlers
   document.querySelectorAll("[data-player]").forEach(el => {
     el.style.cursor = "pointer";
     el.addEventListener("click", () => {
@@ -351,14 +358,29 @@ document.addEventListener("DOMContentLoaded", () => {
       const name = rawName?.toUpperCase();
       if (!name) return;
 
+      // Deselect if already selected
+      if (el.classList.contains("highlighted")) {
+        el.classList.remove("highlighted");
+
+        Object.keys(selectedPlayers).forEach(role => {
+          selectedPlayers[role] = selectedPlayers[role].filter(p => !p.startsWith(name));
+          document.getElementById(role.toLowerCase() + "List").innerHTML = selectedPlayers[role]
+            .map(p => `<span class="player-tag" onclick="removePlayer('${role}', '${p.split(" ")[0]}')">${p}</span>`)
+            .join(", ");
+        });
+
+        return; // Exit early since we deselected
+      }
+
+      // Existing logic for versatile players
       if (versatilePlayers[name]) {
         const options = versatilePlayers[name];
         if (options.length > 1) {
-          showPositionPopup(name, options, el); // 💡 Pass element for conditional glow
+          showPositionPopup(name, options, el); // Show position picker
         } else {
           const added = addPlayerToTeam(name, options[0]);
           if (added) {
-            el.classList.add("highlighted"); // 💡 Only glow if added
+            el.classList.add("highlighted");
             if (firstClick) {
               document.getElementById("instructionText").style.display = "none";
               firstClick = false;
@@ -371,6 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
   function showPositionPopup(player, options, el) {
     const popup = document.getElementById("positionPopup");
     const text = document.getElementById("positionText");

@@ -261,3 +261,17 @@
       cursor: pointer;
       color: red;
     }
+    .close-button {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #999;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.close-button:hover {
+  color: #333;
+}
