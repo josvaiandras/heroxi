@@ -306,20 +306,30 @@ const formationPresets = {
       el.classList.remove("highlighted");
     });
   }
+const roleNames = {
+  GK: "Goalkeeper",
+  DEF: "Defender positions",
+  MID: "Midfielder positions",
+  ATT: "Attacker positions",
+};
 
-  function addPlayerToTeam(name, position) {
-    const role = positionCategory[position];
-    if (!role) return false;
+function addPlayerToTeam(name, position) {
+  const role = positionCategory[position];
+  if (!role) return false;
 
-    if (selectedPlayers[role].length >= formationLimits[role]) {
-      alert(`${role} is already full for this formation.`);
-      return false;
+  if (selectedPlayers[role].length >= formationLimits[role]) {
+    if (role === "GK") {
+      alert(`You already picked a goalkeeper.`);
+    } else {
+      alert(`${roleNames[role]} are already full.`);
     }
+    return false;
+  }
 
-    if (Object.values(selectedPlayers).flat().some(p => p.startsWith(name))) {
-      alert(`${name} is already selected.`);
-      return false;
-    }
+  if (Object.values(selectedPlayers).flat().some(p => p.startsWith(name))) {
+    alert(`${name} is already selected.`);
+    return false;
+  }
 
     selectedPlayers[role].push(`${name} (${position})`);
     document.getElementById(role.toLowerCase() + "List").innerHTML = selectedPlayers[role]
@@ -375,18 +385,23 @@ document.addEventListener("DOMContentLoaded", () => {
       // Existing logic for versatile players
       if (versatilePlayers[name]) {
         const options = versatilePlayers[name];
-        if (options.length > 1) {
-          showPositionPopup(name, options, el); // Show position picker
-        } else {
-          const added = addPlayerToTeam(name, options[0]);
-          if (added) {
-            el.classList.add("highlighted");
-            if (firstClick) {
-              document.getElementById("instructionText").style.display = "none";
-              firstClick = false;
-            }
-          }
-        }
+       if (options.length > 1) {
+  showPositionPopup(name, options, el); // Show position picker
+  if (firstClick) {
+    document.getElementById("instructionText").style.display = "none";
+    firstClick = false;
+  }
+} else {
+  const added = addPlayerToTeam(name, options[0]);
+  if (added) {
+    el.classList.add("highlighted");
+    if (firstClick) {
+      document.getElementById("instructionText").style.display = "none";
+      firstClick = false;
+    }
+  }
+}
+
       } else {
         alert(`No position data found for ${name}.`);
       }

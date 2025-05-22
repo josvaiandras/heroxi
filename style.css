@@ -275,3 +275,14 @@
 .close-button:hover {
   color: #333;
 }
+.poster-container {
+  max-width: 600px;     /* maximum width on big screens */
+  width: 100vw;          /* responsive width: 90% of viewport width */
+  margin: 0 auto;       /* centers horizontally */
+}
+
+.poster-container svg {
+  width: 100%;          /* fills container width */
+  height: auto;         /* keeps aspect ratio */
+  display: block;       /* removes inline gap */
+}
