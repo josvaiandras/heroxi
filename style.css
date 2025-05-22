@@ -1,15 +1,27 @@
-    #topBar {
+/* Variables */
+:root {
+  --topbar-height: 48px; /* adjust if your top bar height changes */
+}
+
+body {
+  background: #111;
+  color: white;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+#topBar {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   background: white;
   color: black;
-  padding: 6px 12px;
+  padding: 10px 20px;
   position: sticky;
-  font-size: 12px;
   top: 0;
   z-index: 1000;
   font-family: sans-serif;
+  font-size: 14px;
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -21,15 +33,15 @@
 
 #formationPicker {
   padding: 6px 12px;
-  font-size: 11px;
+  font-size: 16px;
   border-radius: 4px;
   border: 1px solid #ccc;
 }
 
 #teamList {
   display: flex;
-  gap: 10px;
-  font-size: 10px;
+  gap: 20px;
+  font-size: 14px;
   color: black;
 }
 
@@ -48,10 +60,10 @@
   position: fixed;
   background: white;
   color: black;
-  padding: 16px;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  z-index: 1001;
   max-width: 300px;
   text-align: center;
   font-family: sans-serif;
@@ -60,6 +72,27 @@
 #positionPopup h3,
 #positionPopup #positionText {
   color: black;
+}
+
+#positionPopup button {
+  margin: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #999;
+  cursor: pointer;
+  z-index: 1002;
+}
+
+.close-button:hover {
+  color: #333;
 }
 
 .highlighted {
@@ -84,7 +117,6 @@
   text-align: center;
 }
 
-/* ✅ Apple-style Glassy Buttons */
 #actionSection button {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
@@ -128,161 +160,26 @@
   resize: vertical;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
- #topBar {
-  display: flex;
-  justify-content: flex-start;   /* Start from the left */
-  align-items: center;
-  background: white;
-  color: black;
-  padding: 6px 12px;
-  position: sticky;
-  font-size: 12px;
-  top: 0;
-  z-index: 1000;
-  font-family: sans-serif;
-  overflow-x: auto;
-  white-space: nowrap;
-}
 
-#leftSide {
-  flex-shrink: 0;
-  margin-right: 16px;            /* ✅ Adds space between dropdown and teamList */
-}
-
-#formationPicker {
-  padding: 6px 12px;
-  font-size: 11px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-#teamList {
-  display: flex;
-  gap: 10px;
-  font-size: 10px;
-  color: black;
-}
-
-#teamList span {
-  color: black;
-  font-size: 14px;
-  font-weight: normal;
-}
-
-#teamList strong {
-  font-size: 11px;
-}
-
-#positionPopup {
-  display: none;
-  position: fixed;
-  background: white;
-  color: black;
-  padding: 16px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  max-width: 300px;
-  text-align: center;
-  font-family: sans-serif;
-}
-
-#positionPopup h3,
-#positionPopup #positionText {
-  color: black;
-}
-
-.highlighted {
-  fill: gold !important;
-  filter: drop-shadow(0 0 6px gold);
-  transition: all 0.2s ease-in-out;
-}
-
-#instructionText {
-  color: grey;
-  font-size: 11px;
-  margin-left: 10px;
-}
-    body {
-      background: #111;
-      color: white;
-      font-family: sans-serif;
-      margin: 0;
-    }
-
-    #topBar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: white;
-      color: black;
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    #formationPicker {
-      padding: 6px 12px;
-      font-size: 16px;
-      border-radius: 4px;
-    }
-
-    #teamList {
-      display: flex;
-      gap: 20px;
-      font-size: 14px;
-    }
-
-    .highlighted {
-      fill: gold !important;
-      filter: drop-shadow(0 0 6px gold);
-      transition: all 0.2s ease-in-out;
-    }
-
-    #positionPopup {
-      display: none;
-      position: fixed;
-      background: white;
-      color: black;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      z-index: 999;
-    }
-
-    #positionPopup button {
-      margin: 5px;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    .player-tag {
-      cursor: pointer;
-      color: red;
-    }
-    .close-button {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #999;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.close-button:hover {
-  color: #333;
-}
+/* Poster container with top margin to clear top bar */
 .poster-container {
-  max-width: 600px;     /* maximum width on big screens */
-  width: 100vw;          /* responsive width: 90% of viewport width */
-  margin: 0 auto;       /* centers horizontally */
+  max-width: 600px;             /* max width on large screens */
+  width: 100vw;                 /* full viewport width on small screens */
+  margin: var(--topbar-height) auto 0 auto;  /* push down by top bar height and center horizontally */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* subtle drop shadow */
+  outline: 5px solid black; /* thin black border like a frame */
 }
 
+/* Poster SVG styling with black outline */
 .poster-container svg {
-  width: 100%;          /* fills container width */
-  height: auto;         /* keeps aspect ratio */
-  display: block;       /* removes inline gap */
+  width: 100%;               /* fill container width */
+  height: auto;              /* keep aspect ratio */
+  display: block;            /* remove inline gap */
+  box-sizing: border-box;    /* outline doesn’t increase size */
+}
+
+/* Player tag cursor and color */
+.player-tag {
+  cursor: pointer;
+  color: red;
 }
