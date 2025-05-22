@@ -4,7 +4,7 @@
 }
 
 body {
-  background: #111;
+  background: #ffffff;
   color: white;
   font-family: sans-serif;
   margin: 0;
@@ -161,14 +161,18 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Poster container with top margin to clear top bar */
 .poster-container {
-  max-width: 600px;             /* max width on large screens */
-  width: 100vw;                 /* full viewport width on small screens */
-  margin: var(--topbar-height) auto 0 auto;  /* push down by top bar height and center horizontally */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* subtle drop shadow */
-  outline: 5px solid black; /* thin black border like a frame */
+  background: white;
+  max-width: 600px;
+  width: 100vw;
+  margin: 20px auto 0 auto;
+  box-shadow: 0 0 30px 10px rgba(0, 0, 0, 0.6);
+  outline: 5px solid rgb(0, 0, 0);
+  width: 80%; 
 }
+
+
+
 
 /* Poster SVG styling with black outline */
 .poster-container svg {
