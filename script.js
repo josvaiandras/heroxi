@@ -336,6 +336,8 @@ function addPlayerToTeam(name, position) {
       .map(p => `<span class="player-tag" onclick="removePlayer('${role}', '${name}')">${p}</span>`)
       .join(", ");
 
+checkTeamCompletion(); // ✅ Call it here
+
     return true;
   }
 
@@ -350,6 +352,7 @@ function addPlayerToTeam(name, position) {
         el.classList.remove("highlighted");
       }
     });
+    checkTeamCompletion();
   }
 
  let firstClick = true; // ✅ Add this at the top of your script
@@ -359,7 +362,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("closePopup").addEventListener("click", () => {
     document.getElementById("positionPopup").style.display = "none";
   });
-
+ // Close popup for team completion
+  document.getElementById("closePopupButton").addEventListener("click", () => {
+    document.getElementById("teamCompletePopup").style.display = "none";
+  });
   // Player click handlers
   document.querySelectorAll("[data-player]").forEach(el => {
     el.style.cursor = "pointer";
@@ -379,6 +385,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .join(", ");
         });
 
+        checkTeamCompletion();  // <=== Add this line here
+        
         return; // Exit early since we deselected
       }
 
@@ -435,3 +443,20 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.style.transform = "translate(-50%, -50%)";
     popup.style.display = "block";
   }
+
+  function checkTeamCompletion() {
+  const totalSelected = Object.values(selectedPlayers).flat().length;
+  if (totalSelected === 11) {
+    document.getElementById("teamCompletePopup").style.display = "block";
+    document.getElementById("actionLockMessage").style.display = "none";
+    document.querySelectorAll("#actionSection button").forEach(btn => btn.disabled = false);
+  } else {
+    document.getElementById("teamCompletePopup").style.display = "none";
+    document.getElementById("actionLockMessage").style.display = "block";
+    document.querySelectorAll("#actionSection button").forEach(btn => btn.disabled = true);
+  }
+}
+
+function closeTeamPopup() {
+  document.getElementById("teamCompletePopup").style.display = "none";
+}
