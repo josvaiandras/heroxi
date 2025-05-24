@@ -321,7 +321,7 @@ function addPlayerToTeam(name, position) {
     if (role === "GK") {
       alert(`You already picked a goalkeeper.`);
     } else {
-      alert(`${roleNames[role]} are already full.`);
+      alert(`${roleNames[role]} are already full in this formation.`);
     }
     return false;
   }
@@ -386,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         checkTeamCompletion();  // <=== Add this line here
-        
+
         return; // Exit early since we deselected
       }
 
