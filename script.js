@@ -362,10 +362,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("closePopup").addEventListener("click", () => {
     document.getElementById("positionPopup").style.display = "none";
   });
- // Close popup for team completion
+
+  // Close popup for team completion
   document.getElementById("closePopupButton").addEventListener("click", () => {
     document.getElementById("teamCompletePopup").style.display = "none";
   });
+
   // Player click handlers
   document.querySelectorAll("[data-player]").forEach(el => {
     el.style.cursor = "pointer";
@@ -385,7 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .join(", ");
         });
 
-        checkTeamCompletion();  // <=== Add this line here
+        checkTeamCompletion(); // ✅ Ensures features lock/unlock
 
         return; // Exit early since we deselected
       }
@@ -393,28 +395,82 @@ document.addEventListener("DOMContentLoaded", () => {
       // Existing logic for versatile players
       if (versatilePlayers[name]) {
         const options = versatilePlayers[name];
-       if (options.length > 1) {
-  showPositionPopup(name, options, el); // Show position picker
-  if (firstClick) {
-    document.getElementById("instructionText").style.display = "none";
-    firstClick = false;
-  }
-} else {
-  const added = addPlayerToTeam(name, options[0]);
-  if (added) {
-    el.classList.add("highlighted");
-    if (firstClick) {
-      document.getElementById("instructionText").style.display = "none";
-      firstClick = false;
-    }
-  }
-}
-
+        if (options.length > 1) {
+          showPositionPopup(name, options, el); // Show position picker
+          if (firstClick) {
+            document.getElementById("instructionText").style.display = "none";
+            firstClick = false;
+          }
+        } else {
+          const added = addPlayerToTeam(name, options[0]);
+          if (added) {
+            el.classList.add("highlighted");
+            if (firstClick) {
+              document.getElementById("instructionText").style.display = "none";
+              firstClick = false;
+            }
+          }
+        }
       } else {
         alert(`No position data found for ${name}.`);
       }
     });
   });
+
+  // ✅ Share My XI logic starts here
+
+  // Generate lineup text
+  function generateLineupText() {
+    const formation = document.getElementById("formationPicker").value;
+    const gk = selectedPlayers.GK.join(", ");
+    const def = selectedPlayers.DEF.join(", ");
+    const mid = selectedPlayers.MID.join(", ");
+    const att = selectedPlayers.ATT.join(", ");
+    return `My picked England XI is\n${formation}\nGK: ${gk}\nDEF: ${def}\nMID: ${mid}\nATT: ${att}`;
+  }
+
+  // Export poster to 1080x1350 canvas
+  document.getElementById("shareBtn").addEventListener("click", () => {
+    const captureElement = document.getElementById("posterCapture");
+
+    html2canvas(captureElement, {
+      backgroundColor: "#ffffff",
+      scale: 2
+    }).then(canvas => {
+      const finalCanvas = document.createElement("canvas");
+      finalCanvas.width = 1080;
+      finalCanvas.height = 1350;
+
+      const ctx = finalCanvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+
+      const scale = Math.min(1080 / canvas.width, 1350 / canvas.height);
+      const x = (1080 - canvas.width * scale) / 2;
+      const y = (1350 - canvas.height * scale) / 2;
+
+      ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
+
+      const imageURL = finalCanvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imageURL;
+      link.download = "my-england-xi.png";
+      link.click();
+
+      // Output text to textarea
+      document.getElementById("xiText").value = generateLineupText();
+    });
+  });
+
+  // Copy lineup text to clipboard
+  document.getElementById("copyTextBtn").addEventListener("click", () => {
+    const textarea = document.getElementById("xiText");
+    textarea.select();
+    document.execCommand("copy");
+    alert("✅ Lineup copied to clipboard!");
+  });
+
+  // ✅ Share My XI logic ends here
 });
 
   function showPositionPopup(player, options, el) {
@@ -444,19 +500,29 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.style.display = "block";
   }
 
-  function checkTeamCompletion() {
+ function checkTeamCompletion() {
   const totalSelected = Object.values(selectedPlayers).flat().length;
-  if (totalSelected === 11) {
-    document.getElementById("teamCompletePopup").style.display = "block";
-    document.getElementById("actionLockMessage").style.display = "none";
-    document.querySelectorAll("#actionSection button").forEach(btn => btn.disabled = false);
-  } else {
-    document.getElementById("teamCompletePopup").style.display = "none";
-    document.getElementById("actionLockMessage").style.display = "block";
-    document.querySelectorAll("#actionSection button").forEach(btn => btn.disabled = true);
-  }
-}
+  const isComplete = totalSelected === 11;
 
-function closeTeamPopup() {
-  document.getElementById("teamCompletePopup").style.display = "none";
+  const popup = document.getElementById("teamCompletePopup");
+  const lockMessage = document.getElementById("actionLockMessage");
+  const buttons = document.querySelectorAll("#actionSection button");
+
+  if (isComplete) {
+    popup.style.display = "block";
+    lockMessage.style.display = "none";
+
+    buttons.forEach(btn => {
+      btn.disabled = false;
+      btn.classList.add("unlocked"); // optional: use for styling
+    });
+  } else {
+    popup.style.display = "none";
+    lockMessage.style.display = "block";
+
+    buttons.forEach(btn => {
+      btn.disabled = true;
+      btn.classList.remove("unlocked");
+    });
+  }
 }
