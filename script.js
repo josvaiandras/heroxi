@@ -431,6 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Export poster to 1080x1350 canvas
   document.getElementById("shareBtn").addEventListener("click", () => {
+    console.log("✅ Share button clicked");
     const captureElement = document.getElementById("posterCapture");
 
     html2canvas(captureElement, {
