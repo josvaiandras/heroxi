@@ -356,7 +356,15 @@ checkTeamCompletion(); // ✅ Call it here
   }
 
  let firstClick = true; // ✅ Add this at the top of your script
-
+ // Generate lineup text
+  function generateLineupText() {
+    const formation = document.getElementById("formationPicker").value;
+    const gk = selectedPlayers.GK.join(", ");
+    const def = selectedPlayers.DEF.join(", ");
+    const mid = selectedPlayers.MID.join(", ");
+    const att = selectedPlayers.ATT.join(", ");
+    return `My picked England XI is\n${formation}\nGK: ${gk}\nDEF: ${def}\nMID: ${mid}\nATT: ${att}`;
+  }
 document.addEventListener("DOMContentLoaded", () => {
   // Close popup button handler
   document.getElementById("closePopup").addEventListener("click", () => {
@@ -419,15 +427,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Share My XI logic starts here
 
-  // Generate lineup text
-  function generateLineupText() {
-    const formation = document.getElementById("formationPicker").value;
-    const gk = selectedPlayers.GK.join(", ");
-    const def = selectedPlayers.DEF.join(", ");
-    const mid = selectedPlayers.MID.join(", ");
-    const att = selectedPlayers.ATT.join(", ");
-    return `My picked England XI is\n${formation}\nGK: ${gk}\nDEF: ${def}\nMID: ${mid}\nATT: ${att}`;
+
+document.getElementById("rateButton").addEventListener("click", async () => {
+  const lineupText = generateLineupText();
+  try {
+    const rateButton = document.getElementById("rateButton");
+    rateButton.disabled = true;
+    rateButton.textContent = "Rating...";
+
+    const response = await fetch("http://localhost:3000/rate-xi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ lineupText: lineupText })
+    });
+
+    const data = await response.json();
+    const textBox = document.getElementById("xiText");
+    if (data && data.ratingText) {
+      textBox.value = data.ratingText;
+    } else {
+      textBox.value = "Error: Failed to get rating from AI.";
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("xiText").value = "Error: Could not connect to server.";
+  } finally {
+    const rateButton = document.getElementById("rateButton");
+    rateButton.disabled = false;
+    rateButton.textContent = "Rate my XI";
   }
+});
+
 
   // Export poster to 1080x1350 canvas
   document.getElementById("shareBtn").addEventListener("click", () => {
@@ -473,6 +506,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Share My XI logic ends here
 });
+
+document.getElementById("simulateMatchBtn").addEventListener("click", async () => {
+  const simulateBtn = document.getElementById("simulateMatchBtn");
+  const opponentName = document.getElementById("opponentTeam").value;
+  const lineupText = generateLineupText();
+
+  if (!lineupText || lineupText.includes("No players selected")) {
+    alert("Please complete your England XI before simulating a match.");
+    return;
+  }
+
+  simulateBtn.disabled = true;
+  simulateBtn.textContent = "Simulating match...";
+
+  try {
+    const response = await fetch("http://localhost:3000/simulate-match", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ englandLineup: lineupText, opponentName }),
+    });
+
+    const data = await response.json();
+
+    if (data.result) {
+      // Overwrite the textarea with the simulation result
+      document.getElementById("xiText").value = data.result;
+    } else {
+      document.getElementById("xiText").value = "Error: Something went wrong.";
+    }
+  } catch (error) {
+    console.error("Match simulation error:", error);
+    document.getElementById("xiText").value = "Server error occurred.";
+  } finally {
+    simulateBtn.disabled = false;
+    simulateBtn.textContent = "Simulate match with my XI vs.";
+  }
+});
+
 
   function showPositionPopup(player, options, el) {
     const popup = document.getElementById("positionPopup");

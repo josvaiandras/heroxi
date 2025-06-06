@@ -25,7 +25,7 @@
         <option>4-5-1</option>
         <option>3-6-1</option>
       </select>
-      <span id="instructionText">Click on a player to get started</span>
+      <span id="instructionText">Pick XI players by clicking on their names</span>
     </div>
 
     <!-- Player list can scroll and grow -->
@@ -2414,13 +2414,25 @@
 
 <div id="actionSection">
   <button id="shareBtn" disabled>Share my XI</button>
-  <button disabled>Rate my XI</button>
-  <button disabled>Simulate match with my XI</button>
+  <button id="rateButton" disabled>Rate my XI</button>
+<!-- Wrap simulate + dropdown together -->
+<div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+  <button id="simulateMatchBtn" disabled> Simulate match with my XI vs.</button>
+  <select id="opponentTeam">
+    <option value="France 1998">France 1998</option>
+    <option value="France 2024">France 2024</option>
+    <option value="Germany 2014">Germany 2014</option>
+    <option value="Argentina 2022">Argentina 2022</option>
+    <option value="Brazil 2002">Brazil 2002</option>
+    <option value="Spain 2010">Spain 2010</option>
+    <option value="Italy 2006">Italy 2006</option>
+  </select>
+</div>
   <p id="actionLockMessage">⚠️ Please pick XI players to unlock these features.</p>
 </div>
 <div id="textSummarySection" style="text-align: center; margin-top: 1rem;">
   <h3>Pick your XI players on the poster, then click one of the three options above.</h3>
-  <textarea id="xiText" rows="6" style="width: 90%; max-width: 600px;"></textarea>
+  <textarea id="xiText" rows="6" style="width: 90%; max-width: 600px;" readonly></textarea>
   <br />
   <button id="copyTextBtn">📋 Copy text</button>
 </div>
