@@ -258,6 +258,11 @@ MCMANAMAN: ['RW', 'RM', 'CAM']
       // Add more players here
     };
 // 🔼 END: Versatile Players Object
+
+window.alert = function(message) {
+  showCustomAlert(message);
+};
+
   const positionCategory = {
     GK: "GK",
     LB: "DEF", RB: "DEF", CB: "DEF", LWB: "DEF", RWB: "DEF",
@@ -354,6 +359,7 @@ checkTeamCompletion(); // ✅ Call it here
     });
     checkTeamCompletion();
   }
+  
 
  let firstClick = true; // ✅ Add this at the top of your script
  // Generate lineup text
@@ -363,7 +369,7 @@ checkTeamCompletion(); // ✅ Call it here
     const def = selectedPlayers.DEF.join(", ");
     const mid = selectedPlayers.MID.join(", ");
     const att = selectedPlayers.ATT.join(", ");
-    return `My picked England XI is\n${formation}\nGK: ${gk}\nDEF: ${def}\nMID: ${mid}\nATT: ${att}`;
+    return `My England XI is\n${formation}\n${gk}\nDEF: ${def}\nMID: ${mid}\nATT: ${att}`;
   }
 document.addEventListener("DOMContentLoaded", () => {
   // Close popup button handler
@@ -429,6 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.getElementById("rateButton").addEventListener("click", async () => {
+  document.getElementById("textSummaryHeading").style.display = "none";
   const lineupText = generateLineupText();
   try {
     const rateButton = document.getElementById("rateButton");
@@ -448,7 +455,7 @@ document.getElementById("rateButton").addEventListener("click", async () => {
     if (data && data.ratingText) {
       textBox.value = data.ratingText;
     } else {
-      textBox.value = "Error: Failed to get rating from AI.";
+      textBox.value = "Error: Something went wrong.";
     }
 
   } catch (err) {
@@ -463,38 +470,53 @@ document.getElementById("rateButton").addEventListener("click", async () => {
 
 
   // Export poster to 1080x1350 canvas
-  document.getElementById("shareBtn").addEventListener("click", () => {
-    console.log("✅ Share button clicked");
-    const captureElement = document.getElementById("posterCapture");
+document.getElementById("shareBtn").addEventListener("click", async () => {
+  const shareBtn = document.getElementById("shareBtn");
+  shareBtn.disabled = true;
+  shareBtn.textContent = "Working...";
 
-    html2canvas(captureElement, {
+  document.getElementById("textSummaryHeading").style.display = "none"; 
+  console.log("✅ Share button clicked");
+
+  const captureElement = document.getElementById("posterCapture");
+
+  try {
+    const canvas = await html2canvas(captureElement, {
       backgroundColor: "#ffffff",
       scale: 2
-    }).then(canvas => {
-      const finalCanvas = document.createElement("canvas");
-      finalCanvas.width = 1080;
-      finalCanvas.height = 1350;
-
-      const ctx = finalCanvas.getContext("2d");
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-
-      const scale = Math.min(1080 / canvas.width, 1350 / canvas.height);
-      const x = (1080 - canvas.width * scale) / 2;
-      const y = (1350 - canvas.height * scale) / 2;
-
-      ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
-
-      const imageURL = finalCanvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = imageURL;
-      link.download = "my-england-xi.png";
-      link.click();
-
-      // Output text to textarea
-      document.getElementById("xiText").value = generateLineupText();
     });
-  });
+
+    const finalCanvas = document.createElement("canvas");
+    finalCanvas.width = 1080;
+    finalCanvas.height = 1350;
+
+    const ctx = finalCanvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+
+    const scale = Math.min(1080 / canvas.width, 1350 / canvas.height);
+    const x = (1080 - canvas.width * scale) / 2;
+    const y = (1350 - canvas.height * scale) / 2;
+
+    ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
+
+    const imageURL = finalCanvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = imageURL;
+    link.download = "my-england-xi.png";
+    link.click();
+
+    // Output text to textarea
+    document.getElementById("xiText").value = generateLineupText();
+  } catch (error) {
+    console.error("Sharing error:", error);
+    alert("An error occurred while sharing. Please try again.");
+  } finally {
+    shareBtn.disabled = false;
+    shareBtn.textContent = "Share my XI";
+  }
+});
+
 
   // Copy lineup text to clipboard
   document.getElementById("copyTextBtn").addEventListener("click", () => {
@@ -508,6 +530,7 @@ document.getElementById("rateButton").addEventListener("click", async () => {
 });
 
 document.getElementById("simulateMatchBtn").addEventListener("click", async () => {
+  document.getElementById("textSummaryHeading").style.display = "none"; 
   const simulateBtn = document.getElementById("simulateMatchBtn");
   const opponentName = document.getElementById("opponentTeam").value;
   const lineupText = generateLineupText();
@@ -543,6 +566,16 @@ document.getElementById("simulateMatchBtn").addEventListener("click", async () =
     simulateBtn.textContent = "Simulate match with my XI vs.";
   }
 });
+
+function showCustomAlert(message, duration = 3000) {
+  const alertBox = document.getElementById("customAlert");
+  alertBox.textContent = message;
+  alertBox.style.display = "block";
+
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, duration);
+}
 
 
   function showPositionPopup(player, options, el) {
@@ -586,7 +619,7 @@ document.getElementById("simulateMatchBtn").addEventListener("click", async () =
 
     buttons.forEach(btn => {
       btn.disabled = false;
-      btn.classList.add("unlocked"); // optional: use for styling
+      btn.classList.add("unlocked");
     });
   } else {
     popup.style.display = "none";
@@ -597,4 +630,22 @@ document.getElementById("simulateMatchBtn").addEventListener("click", async () =
       btn.classList.remove("unlocked");
     });
   }
+
+  // ✅ Always update the heading regardless of state
+  updateTextSummaryHeading();
 }
+
+function updateTextSummaryHeading() {
+  const heading = document.getElementById("textSummaryHeading");
+  if (!heading) return;
+
+  const total = Object.values(selectedPlayers).flat().length;
+  if (total === 11) {
+    heading.textContent = "Now pick one of the 3 options above.";
+    heading.style.display = "block";
+  } else {
+    heading.textContent = "Pick your XI players on the poster, then click one of the three options above.";
+    heading.style.display = "block";
+  }
+}
+

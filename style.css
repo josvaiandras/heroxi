@@ -295,4 +295,9 @@ body {
   padding-right: 1.5rem;
   cursor: pointer;
 }
+#textSummarySection {
+  background-color: white !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 
