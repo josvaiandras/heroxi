@@ -470,10 +470,21 @@ document.getElementById("rateButton").addEventListener("click", async () => {
 
 
   // Export poster to 1080x1350 canvas
+// Function to handle image download
+// Function to handle image download
+function downloadImage(imageURL) {
+  const link = document.createElement("a");
+  link.href = imageURL;
+  link.download = "my-england-xi.png";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 document.getElementById("shareBtn").addEventListener("click", async () => {
   const shareBtn = document.getElementById("shareBtn");
   shareBtn.disabled = true;
-  shareBtn.textContent = "Working...";
+  shareBtn.textContent = "Generating...";
 
   document.getElementById("textSummaryHeading").style.display = "none"; 
   console.log("✅ Share button clicked");
@@ -487,37 +498,57 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     });
 
     const finalCanvas = document.createElement("canvas");
-    finalCanvas.width = 1080;
-    finalCanvas.height = 1350;
+    finalCanvas.width = 2160; // Doubled resolution
+    finalCanvas.height = 2700; // Doubled resolution
 
     const ctx = finalCanvas.getContext("2d");
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-    const scale = Math.min(1080 / canvas.width, 1350 / canvas.height);
-    const x = (1080 - canvas.width * scale) / 2;
-    const y = (1350 - canvas.height * scale) / 2;
+    const scale = Math.min(finalCanvas.width / canvas.width, finalCanvas.height / canvas.height);
+    const x = (finalCanvas.width - canvas.width * scale) / 2;
+    const y = (finalCanvas.height - canvas.height * scale) / 2;
 
     ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
 
     const imageURL = finalCanvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = imageURL;
-    link.download = "my-england-xi.png";
-    link.click();
+
+    // Create or update the image container below textSummarySection
+    let imageContainer = document.getElementById("shareImageContainer");
+    if (!imageContainer) {
+      imageContainer = document.createElement("div");
+      imageContainer.id = "shareImageContainer";
+      const textSummarySection = document.getElementById("textSummarySection");
+      textSummarySection.parentNode.insertBefore(imageContainer, textSummarySection.nextSibling);
+    }
+
+    // Display the image and button with centered layout and dynamic event
+    imageContainer.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+        <img src="${imageURL}" alt="Your England XI lineup poster" style="max-width: 400px; width: 100%; height: auto; border: 1px solid #ccc;">
+        <button id="downloadBtn" style="margin: 0; padding: 8px 16px; font-size: 14px; border: none; background-color: #007bff; color: white; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;">Download ⬇️</button>
+      </div>
+    `;
+
+    // Add event listener to the button
+    const downloadButton = document.getElementById("downloadBtn");
+    if (downloadButton) {
+      downloadButton.addEventListener("click", () => downloadImage(imageURL));
+    }
 
     // Output text to textarea
     document.getElementById("xiText").value = generateLineupText();
   } catch (error) {
     console.error("Sharing error:", error);
-    alert("An error occurred while sharing. Please try again.");
+    const imageContainer = document.getElementById("shareImageContainer");
+    if (imageContainer) {
+      imageContainer.innerHTML = `<p style="color: red; text-align: center;">Failed to generate image. Please try again.</p>`;
+    }
   } finally {
     shareBtn.disabled = false;
-    shareBtn.textContent = "Share my XI";
+    shareBtn.textContent = "Regenerate Image";
   }
 });
-
-
   // Copy lineup text to clipboard
   document.getElementById("copyTextBtn").addEventListener("click", () => {
     const textarea = document.getElementById("xiText");
