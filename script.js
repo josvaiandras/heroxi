@@ -380,6 +380,12 @@ checkTeamCompletion(); // ✅ Call it here
     return `My England XI is\n${formation}\n${gk}\nDEF: ${def}\nMID: ${mid}\nATT: ${att}`;
   }
 document.addEventListener("DOMContentLoaded", () => {
+ // Randomize opponent dropdown on load
+  const opponentSelect = document.getElementById("opponentTeam");
+  const options = opponentSelect.options;
+  const randomIndex = Math.floor(Math.random() * options.length);
+  opponentSelect.selectedIndex = randomIndex;
+  
   // Close popup button handler
   document.getElementById("closePopup").addEventListener("click", () => {
     document.getElementById("positionPopup").style.display = "none";
