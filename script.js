@@ -573,11 +573,11 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
 });
 
   // Copy lineup text to clipboard
-  document.getElementById("copyTextBtn").addEventListener("click", () => {
+   document.getElementById("copyTextBtn").addEventListener("click", () => {
     const textarea = document.getElementById("xiText");
     textarea.select();
     document.execCommand("copy");
-    alert("✅ Lineup copied to clipboard!");
+    showCustomAlert("✅ Copied to clipboard!", 3000, "green"); // Use green for success
   });
 
   // ✅ Share My XI logic ends here
@@ -621,16 +621,17 @@ document.getElementById("simulateMatchBtn").addEventListener("click", async () =
   }
 });
 
-function showCustomAlert(message, duration = 3000) {
+// Updated showCustomAlert to support color
+function showCustomAlert(message, duration = 3000, color = "red") { // Default to red for warnings
   const alertBox = document.getElementById("customAlert");
   alertBox.textContent = message;
+  alertBox.style.backgroundColor = color; // Set background color
   alertBox.style.display = "block";
 
   setTimeout(() => {
     alertBox.style.display = "none";
   }, duration);
 }
-
 
   function showPositionPopup(player, options, el) {
     const popup = document.getElementById("positionPopup");
