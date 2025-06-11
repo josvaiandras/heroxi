@@ -471,7 +471,6 @@ document.getElementById("rateButton").addEventListener("click", async () => {
 
   // Export poster to 1080x1350 canvas
 // Function to handle image download
-// Function to handle image download
 function downloadImage(imageURL) {
   const link = document.createElement("a");
   link.href = imageURL;
@@ -526,7 +525,7 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     imageContainer.innerHTML = `
       <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
         <img src="${imageURL}" alt="Your England XI lineup poster" style="max-width: 400px; width: 100%; height: auto; border: 1px solid #ccc;">
-        <button id="downloadBtn" style="margin: 0; padding: 8px 16px; font-size: 14px; border: none; background-color: #007bff; color: white; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;">Download ⬇️</button>
+        <button id="downloadBtn" style="margin: 0; padding: 8px 16px; font-size: 14px; border: none; color: white; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;">Download</button>
       </div>
     `;
 
@@ -546,7 +545,7 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     }
   } finally {
     shareBtn.disabled = false;
-    shareBtn.textContent = "Regenerate Image";
+    shareBtn.textContent = "Regenerate team";
   }
 });
   // Copy lineup text to clipboard
