@@ -262,7 +262,15 @@ MCMANAMAN: ['RW', 'RM', 'CAM']
 window.alert = function(message) {
   showCustomAlert(message);
 };
-
+// Add the missing downloadImage function
+function downloadImage(imageURL) {
+  const link = document.createElement("a");
+  link.href = imageURL;
+  link.download = "my-england-xi.png";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
   const positionCategory = {
     GK: "GK",
     LB: "DEF", RB: "DEF", CB: "DEF", LWB: "DEF", RWB: "DEF",
@@ -470,23 +478,12 @@ document.getElementById("rateButton").addEventListener("click", async () => {
 
 
   // Export poster to 1080x1350 canvas
-// Function to handle image download
-function downloadImage(imageURL) {
-  const link = document.createElement("a");
-  link.href = imageURL;
-  link.download = "my-england-xi.png";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
 document.getElementById("shareBtn").addEventListener("click", async () => {
   const shareBtn = document.getElementById("shareBtn");
   shareBtn.disabled = true;
   shareBtn.textContent = "Generating...";
 
-  document.getElementById("textSummaryHeading").style.display = "none"; 
-  console.log("✅ Share button clicked");
+  document.getElementById("textSummaryHeading").style.display = "none";
 
   const captureElement = document.getElementById("posterCapture");
 
@@ -497,22 +494,49 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     });
 
     const finalCanvas = document.createElement("canvas");
-    finalCanvas.width = 2160; // Doubled resolution
-    finalCanvas.height = 2700; // Doubled resolution
+    finalCanvas.width = 2160; // 1080 * 2
+    finalCanvas.height = 2700; // 1350 * 2
 
     const ctx = finalCanvas.getContext("2d");
+
+    // Fill background white
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-    const scale = Math.min(finalCanvas.width / canvas.width, finalCanvas.height / canvas.height);
-    const x = (finalCanvas.width - canvas.width * scale) / 2;
-    const y = (finalCanvas.height - canvas.height * scale) / 2;
+    // Calculate scaled image size and position
+    const verticalPadding = 90; // Add space at top and bottom
+    const scale = Math.min(
+      finalCanvas.width / canvas.width,
+      (finalCanvas.height - verticalPadding * 2) / canvas.height
+    );
 
-    ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
+    const width = canvas.width * scale;
+    const height = canvas.height * scale;
+    const x = (finalCanvas.width - width) / 2;
+    const y = (finalCanvas.height - height) / 2;
 
+    // Draw shadowed rectangle behind image (transparent copy)
+    ctx.save();
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowBlur = 400;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(x, y, width, height);
+    ctx.restore();
+
+    // Draw the actual poster image
+    ctx.drawImage(canvas, x, y, width, height);
+
+    // Draw black frame
+    const frameWidth = 20;
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = frameWidth;
+    ctx.strokeRect(x - frameWidth / 2, y - frameWidth / 2, width + frameWidth, height + frameWidth);
+
+    // Export image
     const imageURL = finalCanvas.toDataURL("image/png");
 
-    // Create or update the image container below textSummarySection
     let imageContainer = document.getElementById("shareImageContainer");
     if (!imageContainer) {
       imageContainer = document.createElement("div");
@@ -521,21 +545,20 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
       textSummarySection.parentNode.insertBefore(imageContainer, textSummarySection.nextSibling);
     }
 
-    // Display the image and button with centered layout and dynamic event
     imageContainer.innerHTML = `
       <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
         <img src="${imageURL}" alt="Your England XI lineup poster" style="max-width: 400px; width: 100%; height: auto; border: 1px solid #ccc;">
-        <button id="downloadBtn" style="margin: 0; padding: 8px 16px; font-size: 14px; border: none; color: white; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;">Download</button>
+        <button id="downloadBtn" style="margin: 0; padding: 8px 16px; font-size: 14px; border: none; color: white; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px;">Download</button>
       </div>
     `;
 
-    // Add event listener to the button
-    const downloadButton = document.getElementById("downloadBtn");
-    if (downloadButton) {
-      downloadButton.addEventListener("click", () => downloadImage(imageURL));
-    }
+    // Event delegation to ensure the button is captured
+    imageContainer.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "downloadBtn") {
+        downloadImage(imageURL);
+      }
+    });
 
-    // Output text to textarea
     document.getElementById("xiText").value = generateLineupText();
   } catch (error) {
     console.error("Sharing error:", error);
@@ -545,9 +568,10 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     }
   } finally {
     shareBtn.disabled = false;
-    shareBtn.textContent = "Regenerate team";
+    shareBtn.textContent = "Regenerate Image";
   }
 });
+
   // Copy lineup text to clipboard
   document.getElementById("copyTextBtn").addEventListener("click", () => {
     const textarea = document.getElementById("xiText");
