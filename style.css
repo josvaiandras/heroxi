@@ -201,15 +201,11 @@ body {
 .poster-container {
   background: white;
   max-width: 600px;
-  width: 100vw;
-  margin: 20px auto 0 auto;
+  width: 90%; /* Override 100vw to avoid stretching */
+  margin: 20px 0 0 0; /* Remove auto margins to prevent centering */
   box-shadow: 0 0 30px 10px rgba(0, 0, 0, 0.6);
   outline: 5px solid rgb(0, 0, 0);
-  width: 90%; 
 }
-
-
-
 
 /* Poster SVG styling with black outline */
 .poster-container svg {
@@ -360,4 +356,19 @@ body {
   font-weight: bold;
   z-index: 9999;
   transition: background-color 0.3s ease; /* Smooth color transition for JS changes */
+}
+
+/* Desktop layout for min-width 1024px */
+@media screen and (min-width: 1024px) {
+  #layoutWrapper {
+    display: flex;
+    justify-content: flex-start; /* Align poster to the left */
+    padding: 0 40px; /* Increased left and right padding to 40px */
+  }
+
+  .poster-container {
+    flex: 0 0 auto; /* Maintain current size, no stretching */
+    margin-right: 20px; /* 20px gutter to the right of the poster */
+    margin-left: 0; /* Override any default left margin */
+  }
 }

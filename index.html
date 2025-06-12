@@ -9,40 +9,43 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
- <div class="poster-container">
-  <div id="topBar">
-    <!-- Dropdown stays fixed here -->
-    <div id="leftSide">
-      <select id="formationPicker">
-        <option>4-4-2</option>
-        <option>4-3-3</option>
-        <option>3-5-2</option>
-        <option>5-3-2</option>
-        <option>5-4-1</option>
-        <option>4-2-3-1</option>
-        <option>3-4-3</option>
-        <option>4-1-4-1</option>
-        <option>4-5-1</option>
-        <option>3-6-1</option>
-      </select>
-      <span id="instructionText">Pick XI players by clicking on their names</span>
-    </div>
+  <div id="layoutWrapper">
+    <!-- Poster Container (Top Bar and SVG) -->
+    <div class="poster-container">
+      <div id="topBar">
+        <!-- Dropdown stays fixed here -->
+        <div id="leftSide">
+          <select id="formationPicker">
+            <option>4-4-2</option>
+            <option>4-3-3</option>
+            <option>3-5-2</option>
+            <option>5-3-2</option>
+            <option>5-4-1</option>
+            <option>4-2-3-1</option>
+            <option>3-4-3</option>
+            <option>4-1-4-1</option>
+            <option>4-5-1</option>
+            <option>3-6-1</option>
+          </select>
+          <span id="instructionText">Pick XI players by clicking on their names</span>
+        </div>
 
-    <!-- Player list can scroll and grow -->
-    <div id="teamList">
-      <div><strong>GK:</strong> <span id="gkList"></span></div>
-      <div><strong>DEF:</strong> <span id="defList"></span></div>
-      <div><strong>MID:</strong> <span id="midList"></span></div>
-      <div><strong>ATT:</strong> <span id="attList"></span></div>
-    </div>
-  </div>
+        <!-- Player list can scroll and grow -->
+        <div id="teamList">
+          <div><strong>GK:</strong> <span id="gkList"></span></div>
+          <div><strong>DEF:</strong> <span id="defList"></span></div>
+          <div><strong>MID:</strong> <span id="midList"></span></div>
+          <div><strong>ATT:</strong> <span id="attList"></span></div>
+        </div>
+      </div>
 
-  <div id="positionPopup">
-  <span id="closePopup" class="close-button">×</span>
-  <div id="positionText"></div>
-  <div id="positionButtons"></div>
-</div>
-<div id="posterCapture">
+      <div id="positionPopup">
+        <span id="closePopup" class="close-button">×</span>
+        <div id="positionText"></div>
+        <div id="positionButtons"></div>
+      </div>
+      <div id="posterCapture">
+        <!-- ⬇️ Paste your SVG below this comment ⬇️ -->
   <!-- ⬇️ Paste your SVG below this comment ⬇️ -->
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1031.81 1757.48">
@@ -2412,54 +2415,67 @@
 </div>
   <!-- ⬆️ Paste your SVG above this comment ⬆️ -->
 
-<div id="actionSection">
-  <button id="shareBtn" disabled>Share my XI</button>
-  <button id="rateButton" disabled>Rate my XI</button>
-<!-- Wrap simulate + dropdown together -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
-  <button id="simulateMatchBtn" disabled> Simulate match vs.</button>
-  <select id="opponentTeam">
-    <option value="France 1998">Spain 2024</option>
-    <option value="France 1998">France 1998</option>
-    <option value="France 2024">France 2022</option>
-    <option value="Germany 2014">Germany 2014</option>
-    <option value="Argentina 2022">Argentina 2022</option>
-    <option value="Brazil 2002">Brazil 2002</option>
-    <option value="Spain 2010">Spain 2010</option>
-    <option value="Italy 2006">Italy 2006</option>
-    <option value="Netherlands 2010">Netherlands 2010</option>
-    <option value="Portugal 2016">Portugal 2016</option>
-    <option value="England 1966">England 1966</option>
-    <option value="Brazil 1970">Brazil 1970</option>
-    <option value="Brazil 1994">Brazil 1994</option>
-    <option value="Spain 1982">Spain 1982</option>
-    <option value="Argentina 1986">Argentina 1986</option>
-    <option value="Argentina 1986">Portugal 2025</option>
-    <option value="Argentina 1986">France 2025</option>
-  </select>
-</div>
-  <p id="actionLockMessage">⚠️ Please pick XI players to unlock these features.</p>
-</div>
-<div id="textSummarySection" style="text-align: center; margin-top: 0rem;">
-  <h3 id="textSummaryHeading">Pick your XI players on the poster, then click one of the three options above.</h3>
-  <textarea id="xiText" rows="6" style="width: 90%; max-width: 600px;" readonly></textarea>
-  <br />
-  <button id="copyTextBtn">Copy text</button>
-</div>
+<!-- ⬆️ Paste your SVG above this comment ⬆️ -->
+      </div>
+    </div>
 
-<div id="teamCompletePopup">
-   <p><strong>Your XI is ready for action!</strong></p>
-  <p>Scroll down to simulate a match and get your team’s rating.</p>
-  <p>🏆Use code <strong>HERO10</strong> for 10% off your Hero XI poster — you've earned it.🏆</p>
-  <button id="closePopupButton">Close</button>
-</div>
-<!-- ✅ Load html2canvas first -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <!-- Action Section (Buttons) -->
+    <div id="actionSection">
+      <button id="shareBtn" disabled>Share my XI</button>
+      <button id="rateButton" disabled>Rate my XI</button>
+      <!-- Wrap simulate + dropdown together -->
+      <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+        <button id="simulateMatchBtn" disabled> Simulate match vs.</button>
+        <select id="opponentTeam">
+          <option value="France 1998">Spain 2024</option>
+          <option value="France 1998">France 1998</option>
+          <option value="France 2024">France 2022</option>
+          <option value="Germany 2014">Germany 2014</option>
+          <option value="Argentina 2022">Argentina 2022</option>
+          <option value="Brazil 2002">Brazil 2002</option>
+          <option value="Spain 2010">Spain 2010</option>
+          <option value="Italy 2006">Italy 2006</option>
+          <option value="Netherlands 2010">Netherlands 2010</option>
+          <option value="Portugal 2016">Portugal 2016</option>
+          <option value="England 1966">England 1966</option>
+          <option value="Brazil 1970">Brazil 1970</option>
+          <option value="Brazil 1994">Brazil 1994</option>
+          <option value="Spain 1982">Spain 1982</option>
+          <option value="Argentina 1986">Argentina 1986</option>
+          <option value="Argentina 1986">Portugal 2025</option>
+          <option value="Argentina 1986">France 2025</option>
+        </select>
+      </div>
+      <p id="actionLockMessage">⚠️ Please pick XI players to unlock these features.</p>
+    </div>
 
-<div id="customAlert"></div>
+    <!-- Text Summary Section -->
+    <div id="textSummarySection" style="text-align: center; margin-top: 0rem;">
+      <h3 id="textSummaryHeading">Pick your XI players on the poster, then click one of the three options above.</h3>
+      <textarea id="xiText" rows="6" style="width: 90%; max-width: 600px;" readonly></textarea>
+      <br />
+      <button id="copyTextBtn">Copy text</button>
+    </div>
 
-<!-- Link to external JavaScript file -->
-<script src="script.js"></script>
+    <!-- Share Image Container (dynamic) -->
+    <div id="shareImageContainer"></div>
 
+    <!-- Team Complete Popup -->
+    <div id="teamCompletePopup">
+      <p><strong>Your XI is ready for action!</strong></p>
+      <p>Scroll down to simulate a match and get your team’s rating.</p>
+      <p>🏆Use code <strong>HERO10</strong> for 10% off your Hero XI poster — you've earned it.🏆</p>
+      <button id="closePopupButton">Close</button>
+    </div>
+
+    <!-- Custom Alert -->
+    <div id="customAlert"></div>
+  </div>
+
+  <!-- ✅ Load html2canvas first -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- Link to external JavaScript file -->
+  <script src="script.js"></script>
 </body>
 </html>
