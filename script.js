@@ -57,12 +57,12 @@
   "JOE COLE": ["LW", "CAM", "LM"],
   MATTHEWS: ["RW"],
   JOHNSON: ["RB", "RM"],
-  HODDLE: ["CM", "CAM", "AM"],
+  HODDLE: ["CM", "CAM"],
   TRIPPIER: ["RB", "LB", "RWB"],
   INCE: ["CDM", "CM"],
   JAMES: ["GK"],
   FRANCIS: ["ST", "CAM"],
-  SHERINGHAM: ["ST", "CAM",],
+  SHERINGHAM: ["ST", "CAM"],
   NEAL: ["RB"],
   HURST: ["ST"],
   FLOWERS: ["CM"],
@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const options = opponentSelect.options;
   const randomIndex = Math.floor(Math.random() * options.length);
   opponentSelect.selectedIndex = randomIndex;
-  
+
   // Close popup button handler
   document.getElementById("closePopup").addEventListener("click", () => {
     document.getElementById("positionPopup").style.display = "none";
@@ -524,7 +524,7 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     // Draw shadowed rectangle behind image (transparent copy)
     ctx.save();
     ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-    ctx.shadowBlur = 400;
+    ctx.shadowBlur = 1000;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
     ctx.fillStyle = "#ffffff";
@@ -574,7 +574,7 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     }
   } finally {
     shareBtn.disabled = false;
-    shareBtn.textContent = "Regenerate Image";
+    shareBtn.textContent = "Regenerate lineup";
   }
 });
 
@@ -628,10 +628,15 @@ document.getElementById("simulateMatchBtn").addEventListener("click", async () =
 });
 
 // Updated showCustomAlert to support color
-function showCustomAlert(message, duration = 3000, color = "red") { // Default to red for warnings
+function showCustomAlert(message, duration = 3000, color = "red") {
   const alertBox = document.getElementById("customAlert");
   alertBox.textContent = message;
-  alertBox.style.backgroundColor = color; // Set background color
+  alertBox.style.backgroundColor = color;
+  // Use viewport-relative positioning
+  alertBox.style.position = "absolute";
+  alertBox.style.top = (window.innerHeight / 2 + window.scrollY) + "px";
+  alertBox.style.left = (window.innerWidth / 2 + window.scrollX) + "px";
+  alertBox.style.transform = "translate(-50%, -50%)";
   alertBox.style.display = "block";
 
   setTimeout(() => {
@@ -639,32 +644,34 @@ function showCustomAlert(message, duration = 3000, color = "red") { // Default t
   }, duration);
 }
 
-  function showPositionPopup(player, options, el) {
-    const popup = document.getElementById("positionPopup");
-    const text = document.getElementById("positionText");
-    const buttons = document.getElementById("positionButtons");
+function showPositionPopup(player, options, el) {
+  const popup = document.getElementById("positionPopup");
+  const text = document.getElementById("positionText");
+  const buttons = document.getElementById("positionButtons");
 
-    text.textContent = `Where do you want to play ${player}?`;
-    buttons.innerHTML = "";
+  text.textContent = `Where do you want to play ${player}?`;
+  buttons.innerHTML = "";
 
-    options.forEach(pos => {
-      const btn = document.createElement("button");
-      btn.textContent = pos;
-      btn.onclick = () => {
-        popup.style.display = "none";
-        const added = addPlayerToTeam(player, pos);
-        if (added && el) {
-          el.classList.add("highlighted");
-        }
-      };
-      buttons.appendChild(btn);
-    });
+  options.forEach(pos => {
+    const btn = document.createElement("button");
+    btn.textContent = pos;
+    btn.onclick = () => {
+      popup.style.display = "none";
+      const added = addPlayerToTeam(player, pos);
+      if (added && el) {
+        el.classList.add("highlighted");
+      }
+    };
+    buttons.appendChild(btn);
+  });
 
-    popup.style.left = "50%";
-    popup.style.top = "50%";
-    popup.style.transform = "translate(-50%, -50%)";
-    popup.style.display = "block";
-  }
+  // Use viewport-relative positioning
+  popup.style.position = "absolute";
+  popup.style.top = (window.innerHeight / 2 + window.scrollY) + "px";
+  popup.style.left = (window.innerWidth / 2 + window.scrollX) + "px";
+  popup.style.transform = "translate(-50%, -50%)";
+  popup.style.display = "block";
+}
 
  function checkTeamCompletion() {
   const totalSelected = Object.values(selectedPlayers).flat().length;
