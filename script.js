@@ -478,7 +478,7 @@ document.getElementById("rateButton").addEventListener("click", async () => {
   } finally {
     const rateButton = document.getElementById("rateButton");
     rateButton.disabled = false;
-    rateButton.textContent = "Rate my XI";
+    rateButton.textContent = "Rate";
   }
 });
 
@@ -574,7 +574,7 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
     }
   } finally {
     shareBtn.disabled = false;
-    shareBtn.textContent = "Regenerate lineup";
+    shareBtn.textContent = "Regenerate";
   }
 });
 
@@ -601,7 +601,7 @@ document.getElementById("simulateMatchBtn").addEventListener("click", async () =
   }
 
   simulateBtn.disabled = true;
-  simulateBtn.textContent = "Simulating match...";
+  simulateBtn.textContent = "Simulating...";
 
   try {
     const response = await fetch("http://localhost:3000/simulate-match", {
@@ -623,7 +623,7 @@ document.getElementById("simulateMatchBtn").addEventListener("click", async () =
     document.getElementById("xiText").value = "Server error occurred.";
   } finally {
     simulateBtn.disabled = false;
-    simulateBtn.textContent = "Simulate match with my XI vs.";
+    simulateBtn.textContent = "Simulate vs.";
   }
 });
 
